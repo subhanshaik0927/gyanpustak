@@ -2,29 +2,32 @@ import os
 import mysql.connector
 from mysql.connector import Error
 
+import mysql.connector
+from mysql.connector import Error
+import os
+
 def get_db_connection():
     socket_path = os.environ.get('MYSQL_SOCKET', '/tmp/mysql.sock')
     
     try:
         conn = mysql.connector.connect(
             unix_socket=socket_path,
-            user=os.environ.get('MYSQL_USER', 'subhan'),
-            password=os.environ.get('MYSQL_PASSWORD', 'subhan@123'),
-            database=os.environ.get('MYSQL_DATABASE', 'gyanpustak'),
+            user=os.environ.get('MYSQL_USER'),
+            password=os.environ.get('MYSQL_PASSWORD'),
+            database=os.environ.get('MYSQL_DATABASE'),
             autocommit=False
         )
         return conn
     except Error:
         conn = mysql.connector.connect(
-            host=os.environ.get('MYSQL_HOST', '127.0.0.1'),
-            port=int(os.environ.get('MYSQL_PORT', 3306)),
-            user=os.environ.get('MYSQL_USER', 'subhan'),
-            password=os.environ.get('MYSQL_PASSWORD', 'subhan@123'),
-            database=os.environ.get('MYSQL_DATABASE', 'gyanpustak'),
+            host=os.environ.get('MYSQL_HOST'),
+            port=int(os.environ.get('MYSQL_PORT')),
+            user=os.environ.get('MYSQL_USER'),
+            password=os.environ.get('MYSQL_PASSWORD'),
+            database=os.environ.get('MYSQL_DATABASE'),
             autocommit=False
         )
         return conn
-
 def execute_query(conn, query, params=None, fetch=False, fetchone=False):
     cursor = conn.cursor(dictionary=True)
     try:
