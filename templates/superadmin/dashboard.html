@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Super Admin — Staff Management{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0"><i class="bi bi-people me-2 text-primary"></i>Staff Management</h3>
+        <a href="/superadmin/add-employee" class="btn btn-primary"><i class="bi bi-person-plus me-2"></i>Add Employee</a>
+    </div>
+    <div class="card">
+        <div class="card-header">All Employees (Admins & Support Staff)</div>
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr><th>Name</th><th>Email</th><th>Role</th><th>Emp #</th><th>Salary</th><th>Gender</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    {% for emp in employees %}
+                    <tr>
+                        <td class="fw-semibold">{{ emp.first_name }} {{ emp.last_name }}</td>
+                        <td>{{ emp.email }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'danger' if emp.role=='admin' else 'info text-dark' }}">
+                                {{ emp.role.replace('_',' ').title() }}
+                            </span>
+                        </td>
+                        <td class="font-monospace">{{ emp.emp_number }}</td>
+                        <td>₹{{ "{:,.0f}".format(emp.salary or 0) }}</td>
+                        <td>{{ emp.gender }}</td>
+                        <td>
+                            <form method="post" action="/superadmin/employees/{{ emp.employee_id }}/deactivate"
+                                  onsubmit="return confirm('Remove {{ emp.first_name }} {{ emp.last_name }}?')">
+                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-person-x"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="7" class="text-center text-muted py-4">No employees found</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="list-group list-group-flush">
+                    <a href="/superadmin/students" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person-badge me-2 text-primary"></i>View All Students
+                    </a>
+                    <a href="/superadmin/stats" class="list-group-item list-group-item-action">
+                        <i class="bi bi-bar-chart me-2 text-primary"></i>Platform Statistics
+                    </a>
+                    <a href="/admin/dashboard" class="list-group-item list-group-item-action">
+                        <i class="bi bi-shield me-2 text-primary"></i>Admin Panel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

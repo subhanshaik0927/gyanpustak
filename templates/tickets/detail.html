@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Ticket #{{ ticket.ticket_id }}{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/tickets/">Tickets</a></li>
+            <li class="breadcrumb-item active">Ticket #{{ ticket.ticket_id }}</li>
+        </ol>
+    </nav>
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-ticket me-2"></i>#{{ ticket.ticket_id }} — {{ ticket.title }}</span>
+                    {% set sc = {'new':'success','assigned':'warning','in-process':'primary','completed':'secondary'} %}
+                    <span class="badge bg-{{ sc.get(ticket.status,'secondary') }} fs-6">{{ ticket.status.title() }}</span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <small class="text-muted">Category</small>
+                            <p class="fw-semibold">{{ ticket.category.title() }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted">Created By</small>
+                            <p class="fw-semibold">{{ ticket.first_name }} {{ ticket.last_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted">Created At</small>
+                            <p class="fw-semibold">{{ ticket.created_at.strftime('%d %b %Y, %I:%M %p') if ticket.created_at }}</p>
+                        </div>
+                        {% if ticket.completed_at %}
+                        <div class="col-md-6">
+                            <small class="text-muted">Resolved At</small>
+                            <p class="fw-semibold">{{ ticket.completed_at.strftime('%d %b %Y') }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <h6 class="fw-bold">Problem Description</h6>
+                    <div class="p-3 bg-light rounded mb-3">{{ ticket.description }}</div>
+                    {% if ticket.solution %}
+                    <h6 class="fw-bold text-success">Solution</h6>
+                    <div class="p-3 bg-success bg-opacity-10 rounded border-start border-success border-3">{{ ticket.solution }}</div>
+                    {% endif %}
+                    {% if ticket.resolved_by_admin %}
+                    <p class="text-muted mt-2 small"><i class="bi bi-person-check me-1"></i>Resolved by: {{ ticket.admin_fname }} {{ ticket.admin_lname }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Status History -->
+            <div class="card">
+                <div class="card-header"><i class="bi bi-clock-history me-2"></i>Status History</div>
+                <div class="card-body">
+                    <div class="timeline">
+                        {% for log in logs %}
+                        <div class="d-flex gap-3 mb-3">
+                            <div class="flex-shrink-0">
+                                <div class="bg-primary rounded-circle" style="width:10px;height:10px;margin-top:5px;"></div>
+                            </div>
+                            <div>
+                                <strong>{{ log.old_status.title() if log.old_status else 'Created' }}
+                                {% if log.old_status %} → {{ log.new_status.title() }}{% endif %}</strong>
+                                <br>
+                                <small class="text-muted">by {{ log.first_name }} {{ log.last_name }} on {{ log.changed_at.strftime('%d %b %Y, %I:%M %p') if log.changed_at }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            {% if session.role == 'support_staff' and ticket.status == 'new' %}
+            <div class="card">
+                <div class="card-header">Assign Ticket</div>
+                <div class="card-body">
+                    <p class="small text-muted">Assign this ticket to an administrator for resolution.</p>
+                    <form method="post" action="/tickets/{{ ticket.ticket_id }}/update">
+                        <input type="hidden" name="status" value="assigned">
+                        <button class="btn btn-warning w-100"><i class="bi bi-arrow-right-circle me-2"></i>Assign to Admin</button>
+                    </form>
+                </div>
+            </div>
+            {% elif session.role == 'admin' and ticket.status in ('assigned','in-process') %}
+            <div class="card">
+                <div class="card-header">Update Ticket</div>
+                <div class="card-body">
+                    <form method="post" action="/tickets/{{ ticket.ticket_id }}/update">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Status</label>
+                            <select name="status" class="form-select">
+                                <option value="in-process" {{ 'selected' if ticket.status=='in-process' }}>In Process</option>
+                                <option value="completed" {{ 'selected' if ticket.status=='completed' }}>Completed</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Solution</label>
+                            <textarea name="solution" class="form-control" rows="4">{{ ticket.solution or '' }}</textarea>
+                        </div>
+                        <button class="btn btn-primary w-100">Update Ticket</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+            <div class="mt-3">
+                <a href="/tickets/" class="btn btn-outline-secondary w-100">Back to Tickets</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

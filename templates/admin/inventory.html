@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Inventory Management{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <h3 class="fw-bold mb-4"><i class="bi bi-boxes me-2 text-primary"></i>Inventory Management</h3>
+    <div class="card">
+        <div class="card-header">Books by Stock Level (Low to High)</div>
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr><th>Title</th><th>Authors</th><th>Current Stock</th><th>Update Stock</th></tr>
+                </thead>
+                <tbody>
+                    {% for b in books %}
+                    <tr>
+                        <td class="fw-semibold">{{ b.title[:50] }}{{ '...' if b.title|length > 50 }}</td>
+                        <td class="text-muted small">{{ b.authors or 'N/A' }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if b.quantity > 10 else ('warning text-dark' if b.quantity > 0 else 'danger') }} fs-6">
+                                {{ b.quantity }}
+                            </span>
+                        </td>
+                        <td>
+                            <form method="post" action="/admin/inventory/{{ b.book_id }}/update" class="d-flex gap-2">
+                                <input type="number" name="quantity" class="form-control form-control-sm w-auto"
+                                       value="{{ b.quantity }}" min="0" style="width:80px!important">
+                                <button class="btn btn-sm btn-primary"><i class="bi bi-save"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

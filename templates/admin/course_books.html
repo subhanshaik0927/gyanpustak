@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Course Books — {{ course.course_code }}{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/courses">Courses</a></li>
+            <li class="breadcrumb-item active">{{ course.course_code }} — {{ course.course_name }}</li>
+        </ol>
+    </nav>
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-journals me-2"></i>Books for {{ course.course_code }}</div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead><tr><th>ISBN</th><th>Title</th><th>Requirement</th></tr></thead>
+                        <tbody>
+                            {% for cb in course_books %}
+                            <tr>
+                                <td class="font-monospace small">{{ cb.isbn }}</td>
+                                <td>{{ cb.title }}</td>
+                                <td>
+                                    <span class="badge bg-{{ 'danger' if cb.requirement=='required' else 'info text-dark' }}">
+                                        {{ cb.requirement.title() }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="3" class="text-center text-muted py-3">No books linked yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-plus-circle me-2"></i>Link a Book</div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Book</label>
+                            <select name="book_id" class="form-select" required>
+                                <option value="">Select Book</option>
+                                {% for b in all_books %}
+                                <option value="{{ b.book_id }}">{{ b.isbn }} — {{ b.title[:40] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Requirement</label>
+                            <select name="requirement" class="form-select">
+                                <option value="required">Required</option>
+                                <option value="recommended">Recommended</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary w-100"><i class="bi bi-link me-2"></i>Link Book</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

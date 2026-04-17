@@ -1,0 +1,17 @@
+<h1>📚 Books</h1>
+<a href="/cart">🛒 View Cart</a> | <a href="/logout">Logout</a>
+
+<div style="display:flex;flex-wrap:wrap;">
+{% for book in books %}
+<div style="border:1px solid #ccc;padding:10px;margin:10px;width:200px;">
+<h3>{{ book[1] }}</h3>
+<p>₹{{ book[3] }}</p>
+
+<form action="/add_to_cart" method="POST">
+<input type="hidden" name="book_id" value="{{ book[0] }}">
+<button>Add to Cart</button>
+</form>
+
+</div>
+{% endfor %}
+</div>

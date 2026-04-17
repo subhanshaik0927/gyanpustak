@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <h3 class="fw-bold mb-4"><i class="bi bi-speedometer2 me-2 text-primary"></i>Administrator Dashboard</h3>
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <i class="bi bi-journals text-primary fs-2"></i>
+                    <div><div class="fs-3 fw-bold">{{ book_count }}</div><div class="text-muted small">Total Books</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card" style="border-left-color:#10b981">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <i class="bi bi-bag-check text-success fs-2"></i>
+                    <div><div class="fs-3 fw-bold">{{ order_count }}</div><div class="text-muted small">Total Orders</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card" style="border-left-color:#f59e0b">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <i class="bi bi-people text-warning fs-2"></i>
+                    <div><div class="fs-3 fw-bold">{{ student_count }}</div><div class="text-muted small">Students</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card" style="border-left-color:#ef4444">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <i class="bi bi-ticket text-danger fs-2"></i>
+                    <div><div class="fs-3 fw-bold">{{ t_stats.get('assigned',0) + t_stats.get('in-process',0) }}</div>
+                    <div class="text-muted small">Open Tickets</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <span><i class="bi bi-bag me-2"></i>Recent Orders</span>
+                    <a href="/admin/orders" class="btn btn-sm btn-outline-light">View All</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead><tr><th>#</th><th>Student</th><th>Status</th><th>Date</th><th></th></tr></thead>
+                        <tbody>
+                            {% for o in recent_orders %}
+                            <tr>
+                                <td>#{{ o.order_id }}</td>
+                                <td>{{ o.first_name }} {{ o.last_name }}</td>
+                                <td>
+                                    {% set sc = {'new':'primary','processed':'info','awaiting shipping':'warning','shipped':'success','canceled':'danger'} %}
+                                    <span class="badge bg-{{ sc.get(o.order_status,'secondary') }}">{{ o.order_status.title() }}</span>
+                                </td>
+                                <td class="text-muted small">{{ o.created_at.strftime('%d %b %Y') if o.created_at }}</td>
+                                <td><a href="/admin/orders" class="btn btn-sm btn-outline-primary">Manage</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-ticket me-2"></i>Ticket Status</div>
+                <div class="card-body">
+                    {% for s, label in [('new','New'), ('assigned','Assigned'), ('in-process','In Process'), ('completed','Completed')] %}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span>{{ label }}</span>
+                        <span class="badge bg-primary rounded-pill fs-6">{{ t_stats.get(s, 0) }}</span>
+                    </div>
+                    {% endfor %}
+                    <a href="/admin/tickets" class="btn btn-outline-primary btn-sm w-100">Manage Tickets</a>
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-header"><i class="bi bi-lightning me-2"></i>Quick Actions</div>
+                <div class="list-group list-group-flush">
+                    <a href="/admin/books/add" class="list-group-item list-group-item-action">
+                        <i class="bi bi-plus-circle me-2 text-primary"></i>Add New Book
+                    </a>
+                    <a href="/admin/inventory" class="list-group-item list-group-item-action">
+                        <i class="bi bi-boxes me-2 text-primary"></i>Update Inventory
+                    </a>
+                    <a href="/admin/courses" class="list-group-item list-group-item-action">
+                        <i class="bi bi-mortarboard me-2 text-primary"></i>Manage Courses
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

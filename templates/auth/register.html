@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<div class="py-4" style="background: linear-gradient(135deg, #1e293b 0%, #2563eb 100%); min-height: 100vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="text-center mb-4">
+                    <h1 class="text-white fw-bold"><i class="bi bi-book-fill text-warning me-2"></i>GyanPustak</h1>
+                    <p class="text-white-50">Create your student account</p>
+                </div>
+                <div class="card shadow-lg">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-4 text-center">Student Registration</h4>
+                        <form method="post">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">First Name *</label>
+                                    <input type="text" name="first_name" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Last Name *</label>
+                                    <input type="text" name="last_name" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Email Address *</label>
+                                    <input type="email" name="email" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Password *</label>
+                                    <input type="password" name="password" class="form-control" required minlength="6">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Phone</label>
+                                    <input type="tel" name="phone" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Date of Birth</label>
+                                    <input type="date" name="date_of_birth" class="form-control">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Address</label>
+                                    <textarea name="address" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">University</label>
+                                    <select name="university_id" class="form-select">
+                                        <option value="">Select University</option>
+                                        {% for uni in universities %}
+                                        <option value="{{ uni.university_id }}">{{ uni.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Major</label>
+                                    <input type="text" name="major" class="form-control" placeholder="e.g. Computer Science">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Student Status *</label>
+                                    <select name="student_status" class="form-select" required>
+                                        <option value="undergraduate">Undergraduate</option>
+                                        <option value="graduate">Graduate</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Year of Study</label>
+                                    <select name="year_of_study" class="form-select">
+                                        <option value="">Select Year</option>
+                                        <option value="1">1st Year</option>
+                                        <option value="2">2nd Year</option>
+                                        <option value="3">3rd Year</option>
+                                        <option value="4">4th Year</option>
+                                        <option value="5">5th Year</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold mt-4">Create Account</button>
+                        </form>
+                        <hr>
+                        <p class="text-center text-muted mb-0">Already have an account? <a href="/login" class="text-primary fw-semibold">Sign in</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

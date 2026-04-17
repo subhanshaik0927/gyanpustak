@@ -1,0 +1,147 @@
+:root {
+    --gp-primary: #2563eb;
+    --gp-secondary: #1e40af;
+    --gp-accent: #f59e0b;
+    --gp-dark: #1e293b;
+    --gp-light: #f8fafc;
+}
+
+body {
+    background: var(--gp-light);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    background: var(--gp-dark) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--gp-accent) !important;
+}
+
+.navbar-brand span {
+    color: #fff;
+}
+
+.nav-link {
+    color: #cbd5e1 !important;
+    transition: color 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--gp-accent) !important;
+}
+
+/* Sidebar */
+.sidebar {
+    background: #fff;
+    border-right: 1px solid #e2e8f0;
+    min-height: calc(100vh - 56px);
+    padding: 1.5rem 0;
+}
+
+.sidebar .nav-link {
+    color: #475569;
+    border-radius: 0.5rem;
+    margin: 0.1rem 0.75rem;
+    padding: 0.6rem 1rem;
+}
+
+.sidebar .nav-link:hover {
+    background: #f1f5f9;
+    color: var(--gp-primary);
+}
+
+.sidebar .nav-link.active {
+    background: var(--gp-primary);
+    color: #fff !important;
+}
+
+.sidebar .nav-link i {
+    width: 20px;
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem;
+}
+
+.card-header {
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+    background: var(--gp-primary);
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Buttons */
+.btn-primary {
+    background: var(--gp-primary);
+    border-color: var(--gp-primary);
+}
+
+.btn-primary:hover {
+    background: var(--gp-secondary);
+    border-color: var(--gp-secondary);
+}
+
+/* Ticket status badges */
+.badge-new {
+    background: #10b981;
+}
+
+.badge-assigned {
+    background: #f59e0b;
+}
+
+.badge-in-process {
+    background: #3b82f6;
+}
+
+.badge-completed {
+    background: #6b7280;
+}
+
+/* Stat cards */
+.stat-card {
+    border-left: 4px solid var(--gp-primary);
+}
+
+/* Book cards */
+.book-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transition: all 0.25s;
+}
+
+/* Ratings */
+.rating-stars {
+    color: #f59e0b;
+}
+
+/* Footer */
+footer {
+    background: var(--gp-dark);
+    color: #94a3b8;
+    padding: 2rem 0;
+    margin-top: 3rem;
+}
+
+/* Hero section */
+.hero {
+    background: linear-gradient(135deg, var(--gp-dark) 0%, var(--gp-primary) 100%);
+    color: #fff;
+    padding: 3rem 0;
+}
+
+/* Tables */
+.table th {
+    background: #f1f5f9;
+    font-weight: 600;
+}

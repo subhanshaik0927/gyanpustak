@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}Edit Book{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-pencil-square me-2"></i>Edit Book — {{ book.title[:50] }}</div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Title *</label>
+                                <input type="text" name="title" class="form-control" value="{{ book.title }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">ISBN *</label>
+                                <input type="text" name="isbn" class="form-control" value="{{ book.isbn }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Publisher</label>
+                                <input type="text" name="publisher" class="form-control" value="{{ book.publisher or '' }}">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Authors (comma-separated)</label>
+                                <input type="text" name="authors" class="form-control"
+                                       value="{{ authors | map(attribute='author_name') | join(', ') }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Format *</label>
+                                <select name="format" class="form-select" required>
+                                    {% for f in ['hardcover','softcover','electronic'] %}
+                                    <option value="{{ f }}" {{ 'selected' if book.format==f }}>{{ f.title() }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Book Type *</label>
+                                <select name="book_type" class="form-select" required>
+                                    <option value="new" {{ 'selected' if book.book_type=='new' }}>New</option>
+                                    <option value="used" {{ 'selected' if book.book_type=='used' }}>Used</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Purchase Option *</label>
+                                <select name="purchase_option" class="form-select" required>
+                                    <option value="buy" {{ 'selected' if book.purchase_option=='buy' }}>Buy Only</option>
+                                    <option value="rent" {{ 'selected' if book.purchase_option=='rent' }}>Rent Only</option>
+                                    <option value="both" {{ 'selected' if book.purchase_option=='both' }}>Buy & Rent</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Price (₹) *</label>
+                                <input type="number" name="price" class="form-control" step="0.01" value="{{ book.price }}" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Quantity *</label>
+                                <input type="number" name="quantity" class="form-control" value="{{ book.quantity }}" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Edition</label>
+                                <input type="number" name="edition" class="form-control" value="{{ book.edition }}" min="1">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Publication Date</label>
+                                <input type="date" name="publication_date" class="form-control"
+                                       value="{{ book.publication_date.strftime('%Y-%m-%d') if book.publication_date }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Language</label>
+                                <input type="text" name="language" class="form-control" value="{{ book.language }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Category</label>
+                                <select name="category_id" class="form-select">
+                                    <option value="">No Category</option>
+                                    {% for cat in categories %}
+                                    <option value="{{ cat.category_id }}" {{ 'selected' if book.category_id==cat.category_id }}>{{ cat.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Keywords (comma-separated)</label>
+                                <input type="text" name="keywords" class="form-control"
+                                       value="{{ keywords | map(attribute='keyword') | join(', ') }}">
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-2"></i>Save Changes</button>
+                            <a href="/admin/books" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

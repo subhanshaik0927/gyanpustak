@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Students{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <h3 class="fw-bold mb-4"><i class="bi bi-person-badge me-2 text-primary"></i>All Students</h3>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr><th>Name</th><th>Email</th><th>University</th><th>Major</th><th>Status</th><th>Year</th><th>Phone</th></tr>
+                </thead>
+                <tbody>
+                    {% for s in students %}
+                    <tr>
+                        <td class="fw-semibold">{{ s.first_name }} {{ s.last_name }}</td>
+                        <td>{{ s.email }}</td>
+                        <td class="text-muted small">{{ s.university_name or 'N/A' }}</td>
+                        <td>{{ s.major or 'N/A' }}</td>
+                        <td><span class="badge bg-{{ 'primary' if s.student_status=='graduate' else 'success' }}">{{ s.student_status.title() }}</span></td>
+                        <td>{{ s.year_of_study or 'N/A' }}</td>
+                        <td class="text-muted small">{{ s.phone or 'N/A' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <a href="/superadmin/dashboard" class="btn btn-outline-secondary mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}

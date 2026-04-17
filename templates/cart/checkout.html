@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <h3 class="fw-bold mb-4"><i class="bi bi-credit-card me-2 text-primary"></i>Checkout</h3>
+    <form method="post">
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="card mb-4">
+                    <div class="card-header">Shipping Options</div>
+                    <div class="card-body">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="shipping_type" value="standard" id="std" checked>
+                            <label class="form-check-label" for="std"><strong>Standard Shipping</strong> — 5-7 business days (Free)</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="shipping_type" value="2-day" id="twoday">
+                            <label class="form-check-label" for="twoday"><strong>2-Day Shipping</strong> — ₹199 extra</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="shipping_type" value="1-day" id="oneday">
+                            <label class="form-check-label" for="oneday"><strong>1-Day Shipping</strong> — ₹399 extra</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Payment Details</div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Card Type</label>
+                                <select name="cc_type" class="form-select" required>
+                                    <option>Visa</option><option>MasterCard</option>
+                                    <option>RuPay</option><option>Amex</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Cardholder Name</label>
+                                <input type="text" name="cc_holder" class="form-control" required placeholder="As on card">
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label fw-semibold">Card Number</label>
+                                <input type="text" name="cc_number" class="form-control" required
+                                       placeholder="1234 5678 9012 3456" maxlength="19">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Expiry (MM/YY)</label>
+                                <input type="text" name="cc_expiry" class="form-control" required
+                                       placeholder="12/27" pattern="\d{2}/\d{2}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="card sticky-top" style="top:80px;">
+                    <div class="card-header">Order Summary</div>
+                    <div class="card-body">
+                        {% for item in items %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>{{ item.title[:28] }}... <small class="text-muted">({{ item.quantity }}x)</small></span>
+                            <span class="fw-bold">₹{{ "%.0f"|format(item.price * item.quantity) }}</span>
+                        </div>
+                        {% endfor %}
+                        <hr>
+                        <div class="d-flex justify-content-between fw-bold fs-5 text-primary">
+                            <span>Grand Total</span>
+                            <span>₹{{ "%.0f"|format(total) }}</span>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 mt-3 py-2 fw-bold">
+                            <i class="bi bi-check-circle me-2"></i>Place Order
+                        </button>
+                        <a href="/cart/" class="btn btn-outline-secondary w-100 mt-2 btn-sm">Back to Cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

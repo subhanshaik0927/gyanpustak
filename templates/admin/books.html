@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Manage Books{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0"><i class="bi bi-journals me-2 text-primary"></i>Book Inventory</h3>
+        <a href="/admin/books/add" class="btn btn-primary"><i class="bi bi-plus-circle me-2"></i>Add Book</a>
+    </div>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr><th>Title</th><th>Authors</th><th>ISBN</th><th>Price</th><th>Stock</th><th>Format</th><th>Option</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    {% for b in books %}
+                    <tr>
+                        <td class="fw-semibold">{{ b.title[:40] }}{{ '...' if b.title|length > 40 }}</td>
+                        <td class="text-muted small">{{ b.authors or 'N/A' }}</td>
+                        <td class="font-monospace small">{{ b.isbn }}</td>
+                        <td class="fw-bold text-primary">₹{{ "%.0f"|format(b.price) }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if b.quantity > 5 else ('warning text-dark' if b.quantity > 0 else 'danger') }}">
+                                {{ b.quantity }}
+                            </span>
+                        </td>
+                        <td>{{ b.format.title() }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if b.book_type=='new' else 'warning text-dark' }}">{{ b.book_type.title() }}</span>
+                            <span class="badge bg-primary">{{ b.purchase_option.title() }}</span>
+                        </td>
+                        <td>
+                            <a href="/admin/books/{{ b.book_id }}/edit" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

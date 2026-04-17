@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-person-circle me-2"></i>My Profile</div>
+                <div class="card-body p-4">
+                    {% if student %}
+                    <form method="post" action="/student/profile/update">
+                        <h5 class="fw-bold mb-3 text-primary">Personal Information</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">First Name</label>
+                                <input type="text" name="first_name" class="form-control" value="{{ student.first_name }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Last Name</label>
+                                <input type="text" name="last_name" class="form-control" value="{{ student.last_name }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Email</label>
+                                <input type="email" class="form-control" value="{{ student.email }}" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Phone</label>
+                                <input type="tel" name="phone" class="form-control" value="{{ student.phone or '' }}">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Address</label>
+                                <textarea name="address" class="form-control" rows="2">{{ student.address or '' }}</textarea>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3 mt-4 text-primary">Academic Information</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">University</label>
+                                <select name="university_id" class="form-select">
+                                    <option value="">Select University</option>
+                                    {% for uni in universities %}
+                                    <option value="{{ uni.university_id }}" {{ 'selected' if student.university_id == uni.university_id }}>{{ uni.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Major</label>
+                                <input type="text" name="major" class="form-control" value="{{ student.major or '' }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Status</label>
+                                <select name="student_status" class="form-select">
+                                    <option value="undergraduate" {{ 'selected' if student.student_status=='undergraduate' }}>Undergraduate</option>
+                                    <option value="graduate" {{ 'selected' if student.student_status=='graduate' }}>Graduate</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Year of Study</label>
+                                <select name="year_of_study" class="form-select">
+                                    {% for y in range(1,6) %}
+                                    <option value="{{ y }}" {{ 'selected' if student.year_of_study == y }}>{{ y }}{% if y==1 %}st{% elif y==2 %}nd{% elif y==3 %}rd{% else %}th{% endif %} Year</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Date of Birth</label>
+                                <input type="date" name="date_of_birth" class="form-control"
+                                       value="{{ student.date_of_birth.strftime('%Y-%m-%d') if student.date_of_birth }}">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-4 px-4 fw-semibold">
+                            <i class="bi bi-save me-2"></i>Save Changes
+                        </button>
+                    </form>
+                    {% else %}
+                    <div class="alert alert-danger">Could not load profile data.</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
