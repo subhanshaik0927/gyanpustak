@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}Manage Instructors{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0"><i class="bi bi-person-workspace me-2 text-primary"></i>Instructors</h3>
+        <a href="/superadmin/dashboard" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-person-plus me-2"></i>Add New Instructor</div>
+                <div class="card-body p-4">
+                    <form method="post" id="instructorForm">
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">First Name *</label>
+                                <input type="text" name="first_name" class="form-control" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Last Name</label>
+                                <input type="text" name="last_name" class="form-control">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">University *</label>
+                            <select name="university_id" id="uniSelect" class="form-select" required>
+                                <option value="">— Select University —</option>
+                                {% for u in universities %}
+                                <option value="{{ u.university_id }}">{{ u.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Department *</label>
+                            <select name="dept_id" id="deptSelect" class="form-select" required>
+                                <option value="">— Select University first —</option>
+                                {% for d in departments %}
+                                <option value="{{ d.dept_id }}" data-uni="{{ d.university_id }}">
+                                    {{ d.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-person-plus me-2"></i>Add Instructor
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">All Instructors ({{ instructors|length }})</div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>University</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in instructors %}
+                            <tr>
+                                <td class="text-muted">{{ i.instructor_id }}</td>
+                                <td class="fw-semibold">{{ i.first_name }} {{ i.last_name }}</td>
+                                <td>{{ i.dept_name }}</td>
+                                <td><span class="badge bg-secondary">{{ i.university_name }}</span></td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="4" class="text-center text-muted py-4">No instructors yet</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+document.getElementById('uniSelect').addEventListener('change', function () {
+    const selectedUni = this.value;
+    const deptSelect = document.getElementById('deptSelect');
+    const options = deptSelect.querySelectorAll('option[data-uni]');
+    deptSelect.value = '';
+    options.forEach(opt => {
+        opt.hidden = selectedUni && opt.dataset.uni !== selectedUni;
+    });
+    deptSelect.querySelector('option:not([data-uni])').textContent =
+        selectedUni ? '— Select Department —' : '— Select University first —';
+});
+</script>
+{% endblock %}

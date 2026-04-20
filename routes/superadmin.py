@@ -116,6 +116,117 @@ def students():
     finally:
         if conn: conn.close()
 
+@superadmin_bp.route('/universities', methods=['GET', 'POST'])
+@superadmin_required
+def universities():
+    conn = None
+    try:
+        conn = get_db_connection()
+        if request.method == 'POST':
+            f = request.form
+            name = f.get('name', '').strip()
+            address = f.get('address', '').strip()
+            rep_first = f.get('rep_first_name', '').strip()
+            rep_last = f.get('rep_last_name', '').strip()
+            rep_email = f.get('rep_email', '').strip()
+            rep_phone = f.get('rep_phone', '').strip()
+            if not name:
+                flash('University name is required.', 'danger')
+            else:
+                execute_query(conn, """
+                    INSERT INTO university (name, address, rep_first_name, rep_last_name, rep_email, rep_phone)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """, (name, address or None, rep_first or None, rep_last or None,
+                      rep_email or None, rep_phone or None))
+                conn.commit()
+                flash(f'University "{name}" added successfully!', 'success')
+                return redirect(url_for('superadmin.universities'))
+        unis = execute_query(conn, "SELECT * FROM university ORDER BY name", fetch=True)
+        return render_template('superadmin/universities.html', universities=unis)
+    except Exception as e:
+        flash(f'Error: {e}', 'danger')
+        return render_template('superadmin/universities.html', universities=[])
+    finally:
+        if conn: conn.close()
+
+
+@superadmin_bp.route('/departments', methods=['GET', 'POST'])
+@superadmin_required
+def departments():
+    conn = None
+    try:
+        conn = get_db_connection()
+        if request.method == 'POST':
+            f = request.form
+            name = f.get('name', '').strip()
+            university_id = f.get('university_id', '').strip()
+            if not name or not university_id:
+                flash('Department name and university are required.', 'danger')
+            else:
+                execute_query(conn, """
+                    INSERT INTO department (name, university_id) VALUES (%s, %s)
+                """, (name, university_id))
+                conn.commit()
+                flash(f'Department "{name}" added successfully!', 'success')
+                return redirect(url_for('superadmin.departments'))
+        depts = execute_query(conn, """
+            SELECT d.*, u.name as university_name
+            FROM department d
+            JOIN university u ON u.university_id = d.university_id
+            ORDER BY u.name, d.name
+        """, fetch=True)
+        unis = execute_query(conn, "SELECT * FROM university ORDER BY name", fetch=True)
+        return render_template('superadmin/departments.html', departments=depts, universities=unis)
+    except Exception as e:
+        flash(f'Error: {e}', 'danger')
+        return render_template('superadmin/departments.html', departments=[], universities=[])
+    finally:
+        if conn: conn.close()
+
+
+@superadmin_bp.route('/instructors', methods=['GET', 'POST'])
+@superadmin_required
+def instructors():
+    conn = None
+    try:
+        conn = get_db_connection()
+        if request.method == 'POST':
+            f = request.form
+            first_name = f.get('first_name', '').strip()
+            last_name = f.get('last_name', '').strip()
+            university_id = f.get('university_id', '').strip()
+            dept_id = f.get('dept_id', '').strip()
+            if not first_name or not university_id or not dept_id:
+                flash('First name, university and department are required.', 'danger')
+            else:
+                execute_query(conn, """
+                    INSERT INTO instructor (first_name, last_name, university_id, dept_id)
+                    VALUES (%s, %s, %s, %s)
+                """, (first_name, last_name or '', university_id, dept_id))
+                conn.commit()
+                flash(f'Instructor "{first_name} {last_name}" added successfully!', 'success')
+                return redirect(url_for('superadmin.instructors'))
+        instructors_list = execute_query(conn, """
+            SELECT i.*, u.name as university_name, d.name as dept_name
+            FROM instructor i
+            JOIN university u ON u.university_id = i.university_id
+            JOIN department d ON d.dept_id = i.dept_id
+            ORDER BY i.first_name, i.last_name
+        """, fetch=True)
+        unis = execute_query(conn, "SELECT * FROM university ORDER BY name", fetch=True)
+        depts = execute_query(conn, """
+            SELECT d.*, u.name as university_name FROM department d
+            JOIN university u ON u.university_id = d.university_id ORDER BY u.name, d.name
+        """, fetch=True)
+        return render_template('superadmin/instructors.html',
+                               instructors=instructors_list, universities=unis, departments=depts)
+    except Exception as e:
+        flash(f'Error: {e}', 'danger')
+        return render_template('superadmin/instructors.html', instructors=[], universities=[], departments=[])
+    finally:
+        if conn: conn.close()
+
+
 @superadmin_bp.route('/stats')
 @superadmin_required
 def stats():

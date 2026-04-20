@@ -7,7 +7,6 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.environ.get('SESSION_SECRET', 'gyanpustak-secret-key-2025')
 
-app.jinja_env.globals['enumerate'] = enumerate
 
 from routes.auth import auth_bp
 from routes.student import student_bp
@@ -31,4 +30,4 @@ app.register_blueprint(superadmin_bp)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='127.0.0.1', port=port, debug=False)
+    app.run(host='0.0.0.0', port=port, debug=False)

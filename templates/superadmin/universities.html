@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Manage Universities{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0"><i class="bi bi-building me-2 text-primary"></i>Universities</h3>
+        <a href="/superadmin/dashboard" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-plus-circle me-2"></i>Add New University</div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">University Name *</label>
+                            <input type="text" name="name" class="form-control" required placeholder="e.g. IIT Bombay">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Address</label>
+                            <textarea name="address" class="form-control" rows="2" placeholder="City, State - PIN"></textarea>
+                        </div>
+                        <h6 class="fw-bold text-primary mt-3 mb-2">Representative Contact</h6>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">First Name</label>
+                                <input type="text" name="rep_first_name" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Last Name</label>
+                                <input type="text" name="rep_last_name" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Rep Email</label>
+                                <input type="email" name="rep_email" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Rep Phone</label>
+                                <input type="tel" name="rep_phone" class="form-control">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3 w-100">
+                            <i class="bi bi-building-add me-2"></i>Add University
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-header">All Universities ({{ universities|length }})</div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>University</th>
+                                <th>Address</th>
+                                <th>Representative</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in universities %}
+                            <tr>
+                                <td class="text-muted">{{ u.university_id }}</td>
+                                <td class="fw-semibold">{{ u.name }}</td>
+                                <td class="small text-muted">{{ u.address or '—' }}</td>
+                                <td class="small">
+                                    {% if u.rep_first_name %}
+                                        {{ u.rep_first_name }} {{ u.rep_last_name }}<br>
+                                        <span class="text-muted">{{ u.rep_email or '' }}</span>
+                                    {% else %}
+                                        <span class="text-muted">—</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="4" class="text-center text-muted py-4">No universities yet</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

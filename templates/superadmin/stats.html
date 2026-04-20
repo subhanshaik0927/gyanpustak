@@ -19,9 +19,9 @@
                     <table class="table mb-0">
                         <thead><tr><th>Rank</th><th>Title</th><th>Authors</th><th>Sold</th></tr></thead>
                         <tbody>
-                            {% for i, b in top_books|enumerate %}
+                            {% for b in top_books %}
                             <tr>
-                                <td><span class="badge bg-warning text-dark">#{{ i+1 }}</span></td>
+                                <td><span class="badge bg-warning text-dark">#{{ loop.index }}</span></td>
                                 <td class="fw-semibold">{{ b.title[:40] }}{{ '...' if b.title|length > 40 }}</td>
                                 <td class="text-muted small">{{ b.authors or 'N/A' }}</td>
                                 <td><strong>{{ b.sold }}</strong></td>

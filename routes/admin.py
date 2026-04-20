@@ -258,6 +258,43 @@ def courses():
     finally:
         if conn: conn.close()
 
+@admin_bp.route('/courses/add', methods=['GET', 'POST'])
+@admin_required
+def add_course():
+    conn = None
+    try:
+        conn = get_db_connection()
+        unis = execute_query(conn, "SELECT * FROM university ORDER BY name", fetch=True)
+        depts = execute_query(conn, """
+            SELECT d.*, u.name as university_name FROM department d
+            JOIN university u ON u.university_id = d.university_id ORDER BY u.name, d.name
+        """, fetch=True)
+        if request.method == 'POST':
+            f = request.form
+            course_code = f.get('course_code', '').strip()
+            course_name = f.get('course_name', '').strip()
+            university_id = f.get('university_id', '').strip()
+            dept_id = f.get('dept_id', '').strip()
+            year = f.get('year', '').strip() or None
+            semester = f.get('semester', '').strip() or None
+            if not course_code or not course_name or not university_id or not dept_id:
+                flash('Course code, name, university and department are required.', 'danger')
+            else:
+                execute_query(conn, """
+                    INSERT INTO course (course_code, course_name, university_id, dept_id, year, semester)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """, (course_code, course_name, university_id, dept_id, year, semester))
+                conn.commit()
+                flash(f'Course "{course_code} — {course_name}" added successfully!', 'success')
+                return redirect(url_for('admin.courses'))
+        return render_template('admin/add_course.html', universities=unis, departments=depts)
+    except Exception as e:
+        flash(f'Error: {e}', 'danger')
+        return redirect(url_for('admin.courses'))
+    finally:
+        if conn: conn.close()
+
+
 @admin_bp.route('/courses/<int:course_id>/books', methods=['GET', 'POST'])
 @admin_required
 def course_books(course_id):

@@ -4,10 +4,56 @@
 <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold mb-0"><i class="bi bi-people me-2 text-primary"></i>Staff Management</h3>
-        <a href="/superadmin/add-employee" class="btn btn-primary"><i class="bi bi-person-plus me-2"></i>Add Employee</a>
+        <a href="/superadmin/add-employee" class="btn btn-primary">
+            <i class="bi bi-person-plus me-2"></i>Add Employee
+        </a>
     </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <a href="/superadmin/universities" class="text-decoration-none">
+                <div class="card stat-card h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <i class="bi bi-building fs-2 text-primary"></i>
+                        <div><div class="fw-bold">Universities</div><div class="small text-muted">Add / view</div></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <a href="/superadmin/departments" class="text-decoration-none">
+                <div class="card stat-card h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <i class="bi bi-diagram-3 fs-2 text-primary"></i>
+                        <div><div class="fw-bold">Departments</div><div class="small text-muted">Add / view</div></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <a href="/superadmin/instructors" class="text-decoration-none">
+                <div class="card stat-card h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <i class="bi bi-person-workspace fs-2 text-primary"></i>
+                        <div><div class="fw-bold">Instructors</div><div class="small text-muted">Add / view</div></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <a href="/superadmin/students" class="text-decoration-none">
+                <div class="card stat-card h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <i class="bi bi-person-badge fs-2 text-primary"></i>
+                        <div><div class="fw-bold">Students</div><div class="small text-muted">View all</div></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
     <div class="card">
-        <div class="card-header">All Employees (Admins & Support Staff)</div>
+        <div class="card-header">All Employees (Admins &amp; Support Staff)</div>
         <div class="table-responsive">
             <table class="table table-hover mb-0">
                 <thead>
@@ -40,18 +86,19 @@
             </table>
         </div>
     </div>
+
     <div class="row mt-3">
         <div class="col-md-4">
             <div class="card">
                 <div class="list-group list-group-flush">
-                    <a href="/superadmin/students" class="list-group-item list-group-item-action">
-                        <i class="bi bi-person-badge me-2 text-primary"></i>View All Students
-                    </a>
                     <a href="/superadmin/stats" class="list-group-item list-group-item-action">
                         <i class="bi bi-bar-chart me-2 text-primary"></i>Platform Statistics
                     </a>
                     <a href="/admin/dashboard" class="list-group-item list-group-item-action">
                         <i class="bi bi-shield me-2 text-primary"></i>Admin Panel
+                    </a>
+                    <a href="/admin/courses" class="list-group-item list-group-item-action">
+                        <i class="bi bi-mortarboard me-2 text-primary"></i>Manage Courses
                     </a>
                 </div>
             </div>
